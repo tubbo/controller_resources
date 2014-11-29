@@ -1,6 +1,6 @@
-require 'rails_helper'
+require 'spec_helper'
 
-module ControllerResource
+module ControllerResources
   RSpec.describe Extension do
     class MockController < ActionController::Base
       include Extension
