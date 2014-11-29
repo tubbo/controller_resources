@@ -1,3 +1,6 @@
+require 'decent_exposure'
+require 'responders'
+
 module ControllerResources
   # A single macro that combines all controller-level macros we use for
   # the front-end of this application. Simply use the
