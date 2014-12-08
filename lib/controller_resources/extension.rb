@@ -21,19 +21,21 @@ module ControllerResources
     extend ActiveSupport::Concern
 
     included do
+      # Attributes for configuring ControllerResources.
       class_attribute :_search_params
       class_attribute :_edit_params
       class_attribute :_singleton_resource
       class_attribute :_collection_resource
 
-      # Use the StrongParameters strategy
+      # Use the StrongParameters strategy in DecentExposure
       decent_configuration do
         strategy DecentExposure::StrongParametersStrategy
         attributes :edit_params
         except %w(index)
       end
 
-      # Use the FlashResponder and HttpCacheResponder
+      # Use the FlashResponder and HttpCacheResponder to respond to
+      # various requests.
       responders :flash, :http_cache
     end
 
@@ -46,9 +48,9 @@ module ControllerResources
 
         class_eval <<-RUBY
           respond_to :html
-          expose :#{self._singleton_resource}, except: %w(index)
-          expose :#{self._collection_resource}, only: %w(index) do
-            #{self._singleton_resource.to_s.classify}.where(search_params)
+          expose :#{model}, except: %w(index)
+          expose :#{collection}, only: %w(index) do
+            #{model_class}.where(search_params)
           end
           #{authenticate if defined? Devise}
         RUBY
@@ -70,6 +72,14 @@ module ControllerResources
       private
       def authenticate
         "before_action :authenticate_user!, except: %w(index show)"
+      end
+
+      def model_class
+        @model_class ||= model.classify
+      end
+
+      def collection
+        @collection ||= self._collection_resource.to_s
       end
     end
 
