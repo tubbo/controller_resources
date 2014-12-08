@@ -53,6 +53,7 @@ module ControllerResources
             #{model_class}.where(search_params)
           end
           #{authenticate if defined? Devise}
+          #{authorize if defined? Authority}
         RUBY
 
         yield if block_given?
@@ -72,6 +73,10 @@ module ControllerResources
       private
       def authenticate
         "before_action :authenticate_user!, except: %w(index show)"
+      end
+
+      def authorize
+        "authorize_actions_for #{model_class}"
       end
 
       def model_class
