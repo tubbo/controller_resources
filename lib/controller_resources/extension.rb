@@ -46,13 +46,11 @@ module ControllerResources
 
         class_eval <<-RUBY
           respond_to :html
-
-          before_action :authenticate_user!, except: %w(index show)
-
           expose :#{self._singleton_resource}, except: %w(index)
           expose :#{self._collection_resource}, only: %w(index) do
             #{self._singleton_resource.to_s.classify}.where(search_params)
           end
+          #{authenticate if defined? Devise}
         RUBY
 
         yield if block_given?
@@ -67,6 +65,11 @@ module ControllerResources
       # Set the edit params for this controller.
       def modify(*hash_of_params)
         self._edit_params = hash_of_params
+      end
+
+      private
+      def authenticate
+        "before_action :authenticate_user!, except: %w(index show)"
       end
     end
 
