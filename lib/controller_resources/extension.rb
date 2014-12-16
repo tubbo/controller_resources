@@ -80,7 +80,11 @@ module ControllerResources
       end
 
       def model_class
-        @model_class ||= model.classify
+        @model_class ||= self._singleton_resource.to_s.classify
+      end
+
+      def model
+        self._singleton_resource
       end
 
       def collection
