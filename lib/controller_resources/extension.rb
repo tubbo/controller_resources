@@ -26,6 +26,7 @@ module ControllerResources
       class_attribute :_edit_params
       class_attribute :_singleton_resource
       class_attribute :_collection_resource
+      class_attribute :_finder_method
 
       # Use the StrongParameters strategy in DecentExposure
       decent_configuration do
@@ -47,7 +48,6 @@ module ControllerResources
         self._collection_resource = name.to_s.pluralize.to_sym
 
         class_eval <<-RUBY
-          respond_to :html
           expose :#{model}, except: %w(index)
           expose :#{collection}, only: %w(index) do
             #{model_class}.where(search_params)
