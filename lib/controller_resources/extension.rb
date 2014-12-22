@@ -27,6 +27,7 @@ module ControllerResources
       class_attribute :_singleton_resource
       class_attribute :_collection_resource
       class_attribute :_finder_method
+      class_attribute :_protected_actions
 
       # Use the StrongParameters strategy in DecentExposure
       decent_configuration do
@@ -46,6 +47,7 @@ module ControllerResources
         name = self.name.gsub(/Controller/, '').tableize if name.nil?
         self._singleton_resource = name.to_s.singularize.to_sym
         self._collection_resource = name.to_s.pluralize.to_sym
+        self._protected_actions = %w(create update destroy edit new)
 
         class_eval <<-RUBY
           expose :#{model}, except: %w(index)
@@ -70,13 +72,17 @@ module ControllerResources
         self._edit_params = hash_of_params
       end
 
+      def protect(action)
+        self._protected_actions << action
+      end
+
       private
       def authenticate
-        "before_action :authenticate_user!, except: %w(index show)"
+        "before_action :authenticate_user!, only: %w(#{_protected_actions.join(' ')})"
       end
 
       def authorize
-        "authorize_actions_for #{model_class}"
+        "authorize_actions_for :#{model}, only: %w(#{_protected_actions.join(' ')})"
       end
 
       def model_class
