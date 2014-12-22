@@ -3,7 +3,6 @@ rvm: 2.1.5
 cache: bundle
 before_script: bundle exec rake db:setup
 script: bundle exec rspec
-after_script: cat lcov.info | codeclimate
 addons:
   codeclimate:
     repo_token:
