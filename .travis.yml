@@ -1,0 +1,12 @@
+language: ruby
+rvm: 2.1.5
+cache: bundle
+script: bundle exec rspec
+deploy:
+  provider: rubygems
+  api_key:
+    secure: Ss+mExNaQHwVyJ0u5cN/BrrVEPZPUdojUxbVj5xa4fjT8OCmaeXY6DM24L1dDpysNLlExKzNVzK6JZNl1KFE03U6Be+S8sr5yJ3hlhPIqShA21+riiC/yeEnNw9oWv+EDDw2CD5TImF3u4YmGJohVdpCGl2U3tlRP5Kchz1vYjw=
+  gem: controller_resources
+  on:
+    tags: true
+    repo: tubbo/controller_resources
