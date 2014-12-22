@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3"
   spec.add_development_dependency "pg"
   spec.add_development_dependency "generator_spec"
-  spec.add_development_dependency "codeclimate-test-reporter", require: false
+  spec.add_development_dependency "codeclimate-test-reporter"
 
   spec.add_dependency "rails", ">= 4.0.0"
   spec.add_dependency "decent_exposure"
