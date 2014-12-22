@@ -2,6 +2,10 @@ language: ruby
 rvm: 2.1.5
 cache: bundle
 script: bundle exec rspec
+addons:
+  codeclimate:
+    repo_token:
+      secure: CxFMGcOhwkzowVZyys4fxSlsahNTNR6eBnRJmXqOhzjZwOoB7z0j3wfvIv8lDkKl03ayFUmToH147M4euh6RTbyCiFa9ti/bcVglWHaTDn6Qh5Ow6FWSJ76tIPAXpDaipn+ns8PQpsvrBISu6pB0MTgBbMwGQLpEUbDKtOCxexY=
 deploy:
   provider: rubygems
   api_key:
