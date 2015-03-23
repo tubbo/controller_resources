@@ -82,7 +82,7 @@ module ControllerResources
       end
 
       def authorize
-        "authorize_actions_for :#{model}, only: %w(#{_protected_actions.join(' ')})"
+        "authorize_actions_for #{model.to_s.classify}, only: %w(#{_protected_actions.join(' ')})"
       end
 
       def model_class
