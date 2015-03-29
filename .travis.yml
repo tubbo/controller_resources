@@ -1,7 +1,7 @@
 language: ruby
 rvm: 2.1.5
 cache: bundle
-before_script: bundle exec rake db:setup
+#before_script: bundle exec rake db:setup
 script: bundle exec rspec
 addons:
   codeclimate:
