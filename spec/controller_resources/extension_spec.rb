@@ -14,9 +14,14 @@ module ControllerResources
     subject { MockController }
     let(:controller) { subject.new }
 
-    it "defines singleton and collection resources" do
-      expect(subject._singleton_resource).to eq(:model)
-      expect(subject._collection_resource).to eq(:models)
+    it "defines a resource object" do
+      expect(subject._resource).to be_present
+      expect(subject._resource).to be_a(Resource)
+    end
+
+    it "configures the resource object" do
+      expect(subject._resource.model_name).to eq('model')
+      expect(subject._resource.collection_name).to eq('models')
     end
 
     it "saves params" do

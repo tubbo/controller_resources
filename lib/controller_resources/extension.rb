@@ -21,13 +21,7 @@ module ControllerResources
     extend ActiveSupport::Concern
 
     included do
-      # Attributes for configuring ControllerResources.
-      class_attribute :_search_params
-      class_attribute :_edit_params
-      class_attribute :_singleton_resource
-      class_attribute :_collection_resource
-      class_attribute :_finder_method
-      class_attribute :_protected_actions
+      class_attribute :_resource
 
       # Use the StrongParameters strategy in DecentExposure
       decent_configuration do
@@ -43,67 +37,23 @@ module ControllerResources
 
     module ClassMethods
       # Initialize this controller as an authenticated resource.
-      def resource(name=nil, &block)
-        name = self.name.gsub(/Controller/, '').tableize if name.nil?
-        self._singleton_resource = name.to_s.singularize.to_sym
-        self._collection_resource = name.to_s.pluralize.to_sym
-        self._protected_actions = %w(create update destroy edit new)
-
-        class_eval <<-RUBY
-          expose :#{model}, except: %w(index)
-          expose :#{collection}, only: %w(index) do
-            #{model_class}.where(search_params)
-          end
-          #{authenticate if defined? Devise}
-          #{authorize if defined? Authority}
-        RUBY
-
-        yield if block_given?
-      end
-
-      protected
-      # Set the search params for this controller.
-      def search(*hash_of_params)
-        self._search_params = hash_of_params
-      end
-
-      # Set the edit params for this controller.
-      def modify(*hash_of_params)
-        self._edit_params = hash_of_params
-      end
-
-      def protect(action)
-        self._protected_actions << action
-      end
-
-      private
-      def authenticate
-        "before_action :authenticate_user!, only: %w(#{_protected_actions.join(' ')})"
-      end
-
-      def authorize
-        "authorize_actions_for #{model.to_s.classify}, only: %w(#{_protected_actions.join(' ')})"
-      end
-
-      def model_class
-        @model_class ||= self._singleton_resource.to_s.classify
-      end
-
-      def model
-        self._singleton_resource
-      end
-
-      def collection
-        @collection ||= self._collection_resource.to_s
+      def resource(name = self.name.gsub(/Controller/, '').tableize, &block)
+        self._resource = Resource.extend! controller, name do
+          yield
+        end
       end
     end
 
     def search_params
-      params.permit self.class._search_params
+      params.permit resource.search_params
     end
 
     def edit_params
-      params.require(self.class._singleton_resource).permit self._edit_params
+      params.require(resource.model_name).permit resource.edit_params
+    end
+
+    def resource
+      self.class._resource
     end
   end
 end

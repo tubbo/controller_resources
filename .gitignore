@@ -13,3 +13,4 @@
 *.a
 mkmf.log
 /spec/dummy/log/*.log
+/vendor
