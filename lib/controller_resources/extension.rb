@@ -40,9 +40,6 @@ module ControllerResources
 
     # Macros included into the controller as class methods.
     module ClassMethods
-      delegate :model, to: :_resource
-      delegate :collection, to: :_resource
-
       # Initialize this controller as an authenticated resource. You can
       # optionally specify search_params and edit_params which are
       # formed into strong parameter hashes.
@@ -59,8 +56,15 @@ module ControllerResources
       def resource(name = self.name.gsub(/Controller/, '').tableize, &block)
         self._resource = Resource.new(name, &block)
 
-        expose model, except: %i(index)
-        expose collection, only: %i(index), attributes: :search_params
+        expose(
+          _resource.model_name,
+          except: %i(index)
+        )
+        expose(
+          _resource.collection_name,
+          only: %i(index),
+          attributes: :search_params
+        )
       end
     end
 
