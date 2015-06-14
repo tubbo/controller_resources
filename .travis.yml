@@ -1,7 +1,9 @@
 language: ruby
 rvm:
-  - 2.1.5
-  - 2.2.0
+  - 1.9.3
+  - 2.0.0
+  - 2.1.6
+  - 2.2.2
 cache: bundle
 before_script: bin/rake db
 script: bin/rake test
