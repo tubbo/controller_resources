@@ -54,7 +54,8 @@ module ControllerResources
       #                        backing this controller.
       # @param [Block] The block of code 
       def resource(name = self.name.gsub(/Controller/, '').tableize, &block)
-        self._resource = Resource.new(name) { yield }
+        self._resource = Resource.new(name, &block)
+
         expose _resource.model_name, except: %w(index)
         expose _resource.collection_name, only: %w(index), attributes: :search_params
       end

@@ -4,8 +4,10 @@ ENV["RAILS_ENV"] = "test"
 require 'bundler/setup'
 Bundler.require :default, :development
 
+require 'controller_resources'
+
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
+require 'rails/test_help'
 
 CodeClimate::TestReporter.start
 
@@ -18,6 +20,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 if ActiveSupport::TestCase.method_defined?(:fixture_path=)
   ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
 end
+
 
 # Configure RSpec
 RSpec.configure do |config|

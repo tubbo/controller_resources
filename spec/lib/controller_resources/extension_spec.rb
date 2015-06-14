@@ -5,28 +5,31 @@ module ControllerResources
     class MockController < ActionController::Base
       include Extension
 
-      resource :model do
-        search :name
-        modify :name, :password
+      resource :model do |r|
+        r.search :name
+        r.modify :name, :password
       end
     end
 
     subject { MockController }
+
     let(:controller) { subject.new }
 
+    let(:resource) { subject._resource }
+
     it "defines a resource object" do
-      expect(subject._resource).to be_present
-      expect(subject._resource).to be_a(Resource)
+      expect(resource).to be_present
+      expect(resource).to be_a(Resource)
     end
 
     it "configures the resource object" do
-      expect(subject._resource.model_name).to eq('model')
-      expect(subject._resource.collection_name).to eq('models')
+      expect(resource.model_name).to eq(:model)
+      expect(resource.collection_name).to eq(:models)
     end
 
     it "saves params" do
-      expect(subject._search_params).to eq([:name])
-      expect(subject._edit_params).to eq([:name, :password])
+      expect(resource.search_params).to eq([:name])
+      expect(resource.edit_params).to eq([:name, :password])
     end
 
     it "publishes params to instance method" do

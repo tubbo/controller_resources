@@ -45,7 +45,8 @@ module ControllerResources
       @name = name.to_s
       @search_params = []
       @edit_params = []
-      yield if block_given?
+      @block = block
+      yield self if block_given?
     end
 
     # Singular version of the given resource name.
@@ -66,7 +67,7 @@ module ControllerResources
     #
     # @returns [Object]
     def model_class
-      @model_class ||= model_name.classify
+      @model_class ||= model_name.to_s.classify.constantize
     end
 
     # Set the search params for this controller.
