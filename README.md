@@ -58,6 +58,17 @@ Responders:
 $ rails generate responders:install
 ```
 
+This will also insert Responders into your `ApplicationController`. If
+you do not want this, be sure to include the following code in a base
+controller somewhere...this is the best way for `ControllerResources` to
+function:
+
+```ruby
+class ApplicationController < ActionController::Base
+  responders :flash, :http_cache
+end
+```
+
 ## Usage
 
 Define your resource in the controller, and you can use methods instead
