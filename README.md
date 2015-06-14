@@ -12,22 +12,16 @@ at the top of each controller used to set up its state.
 ControllerResources leverages [DecentExposure][de], [Responders][rp] and
 [StrongParameters][sp] to do most of its heavy lifting. DecentExposure
 is used to populate the resource attributes of the controller, so you
-can do things like this:
+can have access to the singular and plural names of the resource as
+methods in each controller action, populated with what you would expect
+as DecentExposure likes to do. Now, all you have to do in order to
+establish all the data you'll need for your controller is:
 
 ```ruby
-class PostsController < ApplicationController
-  resource :post do
-    search :title, :category
-    modify :title, :category, :body, :is_published
-  end
-
-  def index
-    respond_with posts
-  end
-
-  def show
-    respond_with post
-  end
+resource :post do
+  search :title, :category
+  modify :title, :category, :body, :is_published
+end
 ```
 
 ...and not have to worry about where the `posts` and `post` methods come
@@ -36,6 +30,18 @@ we're just using the `expose` macro to set up these resources, and using
 the `resource` macro to populate what we expose and additionally what
 parameters to pass through.
 
+You can establish DecentExposure configuration with the `resource` block
+by calling methods which do not exist on the Resource. All of these
+methods are passed down to DecentExposure:
+
+```ruby
+expose :post, param: :post_id
+resource :comment do
+  ancestor :post
+  search :body
+  modify :body, :user_id
+end
+```
 
 ## Installation
 

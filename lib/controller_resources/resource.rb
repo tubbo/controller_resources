@@ -1,5 +1,10 @@
 module ControllerResources
-  # Data model for the controlled resource.
+  # The "data model" for the controlled resource. In the controller,
+  # defining the +resource+ block instantiates this class, which is used
+  # to hold all of the data the developer provides inside the block and
+  # used in the +Extension+ to actually do the "heavy lifting" in the
+  # controller. This class is just a way of storing all of the
+  # configured state for a given controller's resource.
   class Resource
     # The name of this resource, used to look up the collection and
     # model names.
@@ -25,6 +30,11 @@ module ControllerResources
     # define permitted parameters. The code given in the +resource+
     # block is passed directly here so that the Resource class can be
     # set up with its proper state.
+    #
+    # By default, resources are not given any search or edit params. If
+    # none are provided (via the +search+ and +modify+ configuration
+    # methods), all parameters will be permitted on collection and
+    # member resources respectively.
     #
     # @param [Symbol] name - The name of this resource, typically given
     #                        as a singular symbol.
