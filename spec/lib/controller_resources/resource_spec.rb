@@ -1,8 +1,10 @@
 require 'spec_helper'
 
+# :nodoc:
 class User
 end
 
+# :nodoc:
 module ControllerResources
   RSpec.describe Resource do
     subject do

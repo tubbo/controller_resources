@@ -1,4 +1,5 @@
 module ControllerResources
+  # Extensions for the including Rails app.
   class Engine < ::Rails::Engine
     isolate_namespace ControllerResources
 

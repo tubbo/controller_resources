@@ -1,0 +1,7 @@
+AllCops:
+  Exclude:
+    - spec/dummy/**/*
+    - vendor/**/*
+    - bin/**/*
+Metrics/AbcSize:
+  Max: 32

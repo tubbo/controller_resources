@@ -20,7 +20,7 @@ module ControllerResources
     # Permitted parameters for editing members.
     #
     # @type [Array]
-    attr_reader :edit_params
+    attr_reader :modify_params
 
     # Thrown when a Resource object has not been configured, but we are
     # attempting to use methods defined by ControllerResources.

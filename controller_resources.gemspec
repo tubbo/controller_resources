@@ -8,15 +8,15 @@ Gem::Specification.new do |spec|
   spec.version       = ControllerResources::VERSION
   spec.authors       = ['Tom Scott']
   spec.email         = ['tubbo@psychedeli.ca']
-  spec.summary       = %q{
+  spec.summary       = '
     A controller DSL for Rails that allows you to easily and quickly
     define both singular and collection model resources that can be
     operated on within the controller.
-  }.strip
-  spec.description   = spec.summary + %q(
+  '.strip
+  spec.description   = spec.summary + '
     Attempts to DRY up most of the boilerplate code at the top of
     each controller used to set up its state.
-  ).strip
+  '.strip
   spec.homepage      = 'https://github.com/tubbo/controller_resources'
   spec.license       = 'MIT'
 
@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'generator_spec'
   spec.add_development_dependency 'codeclimate-test-reporter'
+  spec.add_development_dependency 'rubocop'
 
   spec.add_dependency 'rails', '>= 4.0.0'
   spec.add_dependency 'decent_exposure'

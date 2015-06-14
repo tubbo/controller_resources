@@ -38,7 +38,11 @@ module ControllerResources
       helper_method :current_resource
     end
 
+    # Macros included into the controller as class methods.
     module ClassMethods
+      delegate :model, to: :_resource
+      delegate :collection, to: :_resource
+
       # Initialize this controller as an authenticated resource. You can
       # optionally specify search_params and edit_params which are
       # formed into strong parameter hashes.
@@ -52,12 +56,11 @@ module ControllerResources
       #
       # @param [String] name - The parameterized name of the model
       #                        backing this controller.
-      # @param [Block] The block of code 
       def resource(name = self.name.gsub(/Controller/, '').tableize, &block)
         self._resource = Resource.new(name, &block)
 
-        expose _resource.model_name, except: %w(index)
-        expose _resource.collection_name, only: %w(index), attributes: :search_params
+        expose model, except: %i(index)
+        expose collection, only: %i(index), attributes: :search_params
       end
     end
 
@@ -89,7 +92,7 @@ module ControllerResources
     #
     # @returns [Resource]
     def resource
-      raise Resource::NotConfiguredError unless self.class._resource.present?
+      fail Resource::NotConfiguredError unless self.class._resource.present?
       self.class._resource
     end
 
