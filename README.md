@@ -4,14 +4,38 @@
 [![Code Climate](https://codeclimate.com/github/tubbo/controller_resources/badges/gpa.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 [![Test Coverage](https://codeclimate.com/github/tubbo/controller_resources/badges/coverage.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 
-A Rails engine that unites DecentExposure, StrongParameters, Devise (if
-installed) and Draper (if installed) to provide one hell of an awesome
-controller DSL.
+A controller DSL for Rails that allows you to easily and quickly define
+both singular and collection model resources that can be operated on
+within the controller. Attempts to DRY up most of the boilerplate code
+at the top of each controller used to set up its state.
 
-## Features
+ControllerResources leverages [DecentExposure][de], [Responders][rp] and
+[StrongParameters][sp] to do most of its heavy lifting. DecentExposure
+is used to populate the resource attributes of the controller, so you
+can do things like this:
 
-- Provides a common DSL for describing strong parameters as well as
-  rules for DecentExposure and response types (default: html,json)
+```ruby
+class PostsController < ApplicationController
+  resource :post do
+    search :title, :category
+    modify :title, :category, :body, :is_published
+  end
+
+  def index
+    respond_with posts
+  end
+
+  def show
+    respond_with post
+  end
+```
+
+...and not have to worry about where the `posts` and `post` methods come
+from. If you're used to working with DecentExposure, you'll know that
+we're just using the `expose` macro to set up these resources, and using
+the `resource` macro to populate what we expose and additionally what
+parameters to pass through.
+
 
 ## Installation
 
@@ -21,10 +45,11 @@ Add this line to your application's Gemfile:
 gem 'controller_resources'
 ```
 
-Then run the following generator to generate the locale file:
+Then run the following generator to generate the locale files for
+Responders:
 
 ```bash
-$ rails generate controller_resources:install
+$ rails generate responders:install
 ```
 
 ## Usage
@@ -62,10 +87,66 @@ access the model objects passed down into the template:
 <%= user.name %>
 ```
 
+You can also use some given helpers for establishing authorization logic
+in ApplicationController. Since `ControllerResources` is included by
+default, you can use the given `current_resource` method to tell Pundit
+(for example) which policy to use in authorization:
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+  before_action :authorize_user!
+
+  rescue_from Pundit::NotAuthorizedError, with: :forbidden
+
+  def forbidden
+    render 'forbidden', status: :forbidden
+  end
+
+  private
+
+  def authorize_user!
+    authorize current_user, current_resource, current_action
+  end
+
+  def current_action
+    :"#{action_name}?"
+  end
+end
+```
+
+This `current_resource` method is populated by the given configured
+Resource object, which will attempt to classify its `model_name` and
+provide a class constant that can be used here. In the
+`PostsController#show` action, for example, that call to `authorize` would be
+partially expanded like this:
+
+```ruby
+authorize current_user, Post, :show?
+```
+
+(where `current_user` is the authenticated User found by Devise)
+
+While ControllerResources doesn't provide authorization or
+authentication helpers, it does provide the necessary methods to aid
+your own authorization and authentication frameworks in their job.
+
 ## Contributing
 
-1. Fork it ( https://github.com/tubbo/controller_resources/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+Contributions to `ControllerResources` may be made using GitHub pull
+requests. You must include accompanying tests, and all tests must pass
+for any contribution to be considered.
+
+To run tests:
+
+```bash
+$ rake test
+```
+
+This will also use Rubocop to lint-check your code so it adheres to our
+style guide.
+
+[de]: https://github.com/hashrocket/decent_exposure
+[rp]: https://github.com/plataformatec/responders
+[sp]: https://github.com/rails/strong_parameters
+

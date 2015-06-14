@@ -1,92 +1,88 @@
 module ControllerResources
   # Data model for the controlled resource.
   class Resource
-    attr_reader :name, :search_params, :edit_params
+    # The name of this resource, used to look up the collection and
+    # model names.
+    #
+    # @type [String]
+    attr_reader :name
 
+    # Permitted parameters for searching collections.
+    #
+    # @type [Array]
+    attr_reader :search_params
+
+    # Permitted parameters for editing members.
+    #
+    # @type [Array]
+    attr_reader :edit_params
+
+    # Thrown when a Resource object has not been configured, but we are
+    # attempting to use methods defined by ControllerResources.
+    class NotConfiguredError < StandardError; end
+
+    # Instantiate a new Resource with the given name and a block to
+    # define permitted parameters. The code given in the +resource+
+    # block is passed directly here so that the Resource class can be
+    # set up with its proper state.
+    #
+    # @param [Symbol] name - The name of this resource, typically given
+    #                        as a singular symbol.
+    #
+    # @param [Block] &block - A block of code used to set up this
+    #                         object.
     def initialize(name, &block)
       @name = name.to_s
-      @actions = %w(create update destroy edit new)
       @search_params = []
       @edit_params = []
       yield if block_given?
     end
 
-    # Public: Extends the controller with this resource's extensions.
-    def self.extend!(controller, name, &block)
-      resource = new(name) { yield }
-      controller.class_eval resource.controller_extensions
-      resource
-    end
-
-    # Internal: DecentExposure, Devise and Authority macros for the
-    # controller. This is included into the controller when you call
-    # `resource` on the class.
-    def controller_extensions
-      %<
-        expose :#{model_name}, except: %w(index)
-        expose :#{collection_name}, only: %w(index) do
-          #{model_class}.where(search_params)
-        end
-        #{authenticate if devise?}
-        #{authorize if authority?}
-      >
-    end
-
+    # Singular version of the given resource name.
+    #
+    # @returns [Symbol]
     def model_name
-      name.singularize
+      name.singularize.to_sym
     end
 
+    # Pluralized version of the given resource name.
+    #
+    # @returns [Symbol]
     def collection_name
-      name.pluralize
+      name.pluralize.to_sym
     end
 
-    def actions(*new_actions)
-      @actions = new_actions
+    # The model name as a class constant.
+    #
+    # @returns [Object]
+    def model_class
+      @model_class ||= model_name.classify
     end
 
     # Set the search params for this controller.
+    #
+    # Example:
+    #
+    #   resource :post do
+    #     search :title, :category, :tag
+    #   end
+    #
+    # @param [Array] A collection of params to whitelist.
     def search(*params)
       @search_params = params
     end
 
     # Set the edit params for this controller.
+    #
+    # Example:
+    #
+    #   resource :post do
+    #     modify :title, :category, :tag, :body, :is_published
+    #   end
+    #
+    # @param [Array] A collection of params to whitelist.
     def modify(*params)
       @edit_params = params
-    end
-
-    # Add an action to the list of protected actions.
-    def protect(action)
-      @actions << action
-    end
-
-    # Remove an action from the list of protected actions.
-    def unprotect(action)
-      @actions = @actions.reject { |existing| existing == action.to_s }
-    end
-
-    private
-    def protected_actions
-      @actions.join(' ')
-    end
-
-    def authenticate
-      "before_action :authenticate_user!, only: %w(#{protected_actions})"
-    end
-
-    def authorize
-      "authorize_actions_for #{model.to_s.classify}, only: %w(#{protected_actions})"
-    end
-
-    def model_class
-      @model_class ||= model_name.classify
-    end
-
-    def devise?
-      defined? Devise
-    end
-
-    def authority?
-      defined? Authority
     end
   end
 end

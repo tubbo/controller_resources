@@ -1,7 +1,12 @@
-require "controller_resources/engine"
-require "controller_resources/version"
-require "controller_resources/extension"
+require 'active_support/all'
+require 'decent_exposure'
+require 'responders'
+require 'controller_resources/version'
 
 module ControllerResources
-  # config
+  extend ActiveSupport::Autoload
+
+  autoload :Engine
+  autoload :Resource
+  autoload :Extension
 end
