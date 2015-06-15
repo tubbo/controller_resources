@@ -4,8 +4,8 @@ rvm:
   - 2.1.6
   - 2.2.2
 cache: bundle
-before_script: bin/rake db
-script: bin/rake test
+before_script: ./bin/rake db
+script: ./bin/rake test
 addons:
   codeclimate:
     repo_token:
