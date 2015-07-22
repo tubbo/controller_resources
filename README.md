@@ -4,18 +4,13 @@
 [![Code Climate](https://codeclimate.com/github/tubbo/controller_resources/badges/gpa.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 [![Test Coverage](https://codeclimate.com/github/tubbo/controller_resources/badges/coverage.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 
-A controller DSL for Rails that allows you to easily and quickly define
-both singular and collection model resources that can be operated on
-within the controller. Attempts to DRY up most of the boilerplate code
-at the top of each controller used to set up its state.
-
-ControllerResources leverages [DecentExposure][de], [Responders][rp] and
-[StrongParameters][sp] to do most of its heavy lifting. DecentExposure
-is used to populate the resource attributes of the controller, so you
-can have access to the singular and plural names of the resource as
-methods in each controller action, populated with what you would expect
-as DecentExposure likes to do. Now, all you have to do in order to
-establish all the data you'll need for your controller is:
+A Rails engine providing a common DSL for fetching model resources in
+the controller and view layers. It leverages
+[DecentExposure][de],[StrongParameters][sp] and assumes an
+[ActiveRecord][ar]-like DSL for querying model objects.
+ControllerResources does not assume any part of your stack, instead
+providing generic tools and extensions to ActionController which allow
+you to use the fetched resources however you want.
 
 ```ruby
 resource :post do
@@ -104,6 +99,7 @@ access the model objects passed down into the template:
 <%= user.name %>
 ```
 
+<<<<<<< HEAD
 You can also use some given helpers for establishing authorization logic
 in ApplicationController. Since `ControllerResources` is included by
 default, you can use the given `current_resource` method to tell Pundit
