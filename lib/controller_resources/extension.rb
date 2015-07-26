@@ -31,10 +31,6 @@ module ControllerResources
         except %w(index)
       end
 
-      # Use the FlashResponder and HttpCacheResponder to respond to
-      # various requests.
-      responders :flash, :http_cache
-
       helper_method :current_resource
     end
 
@@ -53,18 +49,10 @@ module ControllerResources
       #
       # @param [String] name - The parameterized name of the model
       #                        backing this controller.
-      def resource(name = self.name.gsub(/Controller/, '').tableize, &block)
-        self._resource = Resource.new(name, &block)
-
-        expose(
-          _resource.model_name,
-          except: %i(index)
-        )
-        expose(
-          _resource.collection_name,
-          only: %i(index),
-          attributes: :search_params
-        )
+      def resource(name = self.name.gsub(/Controller/, '').tableize, overrides={}, &block)
+        self._resource = Resource.new(name, overrides, &block)
+        expose _resource.model_name, _resource.model_options
+        expose _resource.collection_name, _resource.collection_options
       end
     end
 

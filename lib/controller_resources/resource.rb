@@ -22,6 +22,12 @@ module ControllerResources
     # @type [Array]
     attr_reader :edit_params
 
+    # Override options for decent_exposure that apply to all exposed
+    # resources.
+    #
+    # @type [Hash]
+    attr_reader :overrides
+
     # Thrown when a Resource object has not been configured, but we are
     # attempting to use methods defined by ControllerResources.
     class NotConfiguredError < StandardError; end
@@ -41,11 +47,17 @@ module ControllerResources
     #
     # @param [Block] &block - A block of code used to set up this
     #                         object.
-    def initialize(name, &block)
+    def initialize(name, overrides={}, &block)
       @name = name.to_s
       @search_params = []
       @edit_params = []
       @block = block
+      @overrides = overrides
+      @model_options = { except: %i(index) }
+      @collection_options = {
+        only: %i(index),
+        attributes: :search_params
+      }
       yield self if block_given?
     end
 
@@ -94,6 +106,22 @@ module ControllerResources
     # @param [Array] A collection of params to whitelist.
     def modify(*params)
       @edit_params = params
+    end
+
+    def model(options={})
+      @model_options.merge!(options)
+    end
+
+    def collection(options={})
+      @collection_options.merge!(options)
+    end
+
+    def model_options
+      @model_options.merge(overrides)
+    end
+
+    def collection_options
+      @collection_options.merge(overrides)
     end
   end
 end
