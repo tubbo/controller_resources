@@ -5,7 +5,7 @@ require 'rubocop/rake_task'
 
 desc 'Set up the test database for the dummy app'
 task :db do
-  sh 'cd spec/dummy && bundle exec rake db:create db:migrate'
+  sh 'cd spec/dummy && bundle exec rake db:setup'
 end
 
 # Run RSpec code examples
