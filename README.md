@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/tubbo/controller_resources.svg)](https://travis-ci.org/tubbo/controller_resources)
 [![Code Climate](https://codeclimate.com/github/tubbo/controller_resources/badges/gpa.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 [![Test Coverage](https://codeclimate.com/github/tubbo/controller_resources/badges/coverage.svg)](https://codeclimate.com/github/tubbo/controller_resources)
+[![Inline docs](http://inch-ci.org/github/tubbo/controller_resources.svg?branch=master)](http://inch-ci.org/github/tubbo/controller_resources)
 
 A Rails engine providing a common DSL for fetching model resources in
 the controller and view layers. It leverages
@@ -98,6 +99,9 @@ Contributions to `ControllerResources` may be made using GitHub pull
 requests. You must include accompanying tests, and all tests must pass
 for any contribution to be considered.
 
+**NOTE:** Running tests requires that you have [PhantomJS][pjs]
+installed.
+
 To run tests:
 
 ```bash
@@ -108,7 +112,6 @@ This will also use Rubocop to lint-check your code so it adheres to our
 style guide.
 
 ## Releasing
-
 
 All acceptance testing and final RubyGems.org releasing is performed
 automatically by [Travis CI][ci]. When a new gem version needs to be
@@ -121,14 +124,15 @@ Travis and auto-deployed to [RubyGems][rg]:
 $ bin/rake release
 ```
 
-ControllerResources adheres to the [Semantic Versioning][semver]
+ControllerResources adheres to the [Semantic Versioning][sv]
 standard for publishing new versions of the library. Bug fixes will be
 pushed in patch updates, while new features that maintain compatibility
 will be available in minor updates. Major updates are reserved for new
 features that break existing compatibility.
 
 [de]: https://github.com/hashrocket/decent_exposure
-[rp]: https://github.com/plataformatec/responders
 [sp]: https://github.com/rails/strong_parameters
 [ci]: https://travis-ci.org
 [rg]: https://rubygems.org
+[pjs]: http://phantomjs.org
+[sv]: http://semver.org
