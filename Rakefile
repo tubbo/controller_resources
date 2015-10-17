@@ -3,6 +3,8 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'controller_resources/version'
+require 'yard'
+require 'travis/release/task'
 
 desc 'Set up the test database for the dummy app'
 task :db do
@@ -18,13 +20,11 @@ RuboCop::RakeTask.new :lint
 # Clear out default Bundler release task
 Rake::Task['release'].clear
 
-desc "Release version to RubyGems via Travis-CI"
-task release: %w(
-  build release:guard_clean release:source_control_push
-) do
-  Bundler.ui.confirm 'Please wait for Travis-CI to build the gem'
-  Bundler.ui.confirm 'https://travis-ci.org/tubbo/controller_resources'
-end
+# Rake tasks for building YARD documentation
+YARD::Rake::YardocTask.new :doc
+
+# Release version to RubyGems via Travis-CI
+Travis::Release::Task.new
 
 # CI task
 task default: %i(lint db test build)

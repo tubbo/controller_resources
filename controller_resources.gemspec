@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'database_cleaner', '~> 1'
   spec.add_development_dependency 'pry', '~> 0'
   spec.add_development_dependency 'yard', '~> 0'
+  spec.add_development_dependency 'travis-release', '~> 0'
 
   spec.add_dependency 'rails', '~> 4'
   spec.add_dependency 'decent_exposure', '~> 2'
