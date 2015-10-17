@@ -18,3 +18,4 @@ deploy:
   on:
     tags: true
     repo: tubbo/controller_resources
+    rvm: 2.2.2
