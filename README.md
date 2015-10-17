@@ -126,11 +126,20 @@ Travis and auto-deployed to [RubyGems][rg]:
 $ bin/rake release
 ```
 
+## Compatibility
+
 ControllerResources adheres to the [Semantic Versioning][sv]
 standard for publishing new versions of the library. Bug fixes will be
 pushed in patch updates, while new features that maintain compatibility
 will be available in minor updates. Major updates are reserved for new
 features that break existing compatibility.
+
+### Ruby version support
+
+This project will be tested against any version of MRI that is currently
+being supported by the Ruby core team. It is not currently being tested
+on JRuby or Rubinius. For more information on what versions of Ruby
+we're testing, see [Travis CI][ci].
 
 [de]: https://github.com/hashrocket/decent_exposure
 [sp]: https://github.com/rails/strong_parameters

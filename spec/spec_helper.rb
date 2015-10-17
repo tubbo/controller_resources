@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'codeclimate-test-reporter'
@@ -12,8 +12,7 @@ DatabaseCleaner.strategy = :transaction
 # Start test coverage reporting
 CodeClimate::TestReporter.start
 
-# Load Rails dummy app
-require File.expand_path('../dummy/config/environment.rb',  __FILE__)
+# Clean backtraces
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
