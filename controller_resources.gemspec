@@ -25,18 +25,18 @@ Gem::Specification.new do |spec|
   spec.test_files = spec.files.grep(%r{^|spec/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'bundler', '~> 1'
+  spec.add_development_dependency 'rake', '~> 10'
   spec.add_development_dependency 'rspec', '~> 3'
-  spec.add_development_dependency 'rspec-rails'
-  spec.add_development_dependency 'pg'
-  spec.add_development_dependency 'codeclimate-test-reporter'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'capybara'
-  spec.add_development_dependency 'database_cleaner'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'yard'
+  spec.add_development_dependency 'rspec-rails', '~> 3'
+  spec.add_development_dependency 'pg', '~> 0'
+  spec.add_development_dependency 'codeclimate-test-reporter', '~> 0'
+  spec.add_development_dependency 'rubocop', '~> 0'
+  spec.add_development_dependency 'capybara', '~> 2'
+  spec.add_development_dependency 'database_cleaner', '~> 1'
+  spec.add_development_dependency 'pry', '~> 0'
+  spec.add_development_dependency 'yard', '~> 0'
 
-  spec.add_dependency 'rails'
-  spec.add_dependency 'decent_exposure'
+  spec.add_dependency 'rails', '~> 4'
+  spec.add_dependency 'decent_exposure', '~> 2'
 end
