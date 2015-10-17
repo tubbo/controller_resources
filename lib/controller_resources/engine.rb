@@ -3,9 +3,9 @@ module ControllerResources
   class Engine < ::Rails::Engine
     isolate_namespace ControllerResources
 
-    config.to_prepare do
-      ApplicationController.class_eval do
-        include ControllerResources::Extension
+    ActiveSupport.on_load :action_controller do
+      ActionController::Base.class_eval do
+        include ControllerResources
       end
     end
   end

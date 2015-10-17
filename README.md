@@ -50,15 +50,6 @@ And run
 $ bundle install
 ```
 
-Then, include the `ControllerResources` module into your
-`ApplicationController`:
-
-```ruby
-class ApplicationController < ActionController::Base
-  include ControllerResources
-end
-```
-
 ## Usage
 
 Define your resource in the controller, and you can use methods instead
@@ -92,6 +83,15 @@ access the model objects passed down into the template:
 ```erb
 <%= user.name %>
 ```
+
+### Meta-Programming Capabilities
+
+Since `ControllerResources` is programatically defining exposure methods
+for you, it also keeps references to the name given in the `resource`
+block so you can infer what kind of object you are using in your view.
+The `model_name`, `collection_name` and `model` / `collection` methods
+are included as helpers along with the rest of the exposure methods in
+your view as well as the controller.
 
 ## Contributing
 

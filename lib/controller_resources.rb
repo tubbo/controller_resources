@@ -1,6 +1,7 @@
 require 'active_support/all'
 require 'decent_exposure'
 require 'controller_resources/version'
+require 'controller_resources/engine'
 require 'controller_resources/not_defined_error'
 
 # A DSL for ActionController that allows you to easily and quickly define
@@ -11,8 +12,6 @@ require 'controller_resources/not_defined_error'
 # @example
 #
 #   class PostsController < ApplicationController
-#     include ControllerResources
-#
 #     resource :post do
 #       permit :title, :body, :author_id
 #     end
