@@ -1,16 +1,16 @@
+# Start test coverage reporting
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
-require 'codeclimate-test-reporter'
 require 'database_cleaner'
 require 'pry'
 
 # Perform all DB operations within a transaction.
 DatabaseCleaner.strategy = :transaction
-
-# Start test coverage reporting
-CodeClimate::TestReporter.start
 
 # Clean backtraces
 Rails.backtrace_cleaner.remove_silencers!
