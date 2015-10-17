@@ -35,5 +35,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rails'
   spec.add_dependency 'decent_exposure'
-  spec.add_dependency 'responders'
 end

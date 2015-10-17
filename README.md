@@ -14,8 +14,7 @@ you to use the fetched resources however you want.
 
 ```ruby
 resource :post do
-  search :title, :category
-  modify :title, :category, :body, :is_published
+  permit :title, :category, :body, :is_published
 end
 ```
 
@@ -31,10 +30,8 @@ methods are passed down to DecentExposure:
 
 ```ruby
 expose :post, param: :post_id
-resource :comment do
-  ancestor :post
-  search :body
-  modify :body, :user_id
+resource :comment, ancestor: :post do
+  permit :body, :user_id
 end
 ```
 
@@ -46,21 +43,18 @@ Add this line to your application's Gemfile:
 gem 'controller_resources'
 ```
 
-Then run the following generator to generate the locale files for
-Responders:
+And run
 
 ```bash
-$ rails generate responders:install
+$ bundle install
 ```
 
-This will also insert Responders into your `ApplicationController`. If
-you do not want this, be sure to include the following code in a base
-controller somewhere...this is the best way for `ControllerResources` to
-function:
+Then, include the `ControllerResources` module into your
+`ApplicationController`:
 
 ```ruby
 class ApplicationController < ActionController::Base
-  responders :flash, :http_cache
+  include ControllerResources
 end
 ```
 
@@ -73,8 +67,7 @@ methods!
 ```ruby
 class ItemsController < ApplicationController
   resource :item do
-    search :name, :user
-    modify :name, :user, :is_private
+    permit :name, :user, :is_private
   end
 
   def index
@@ -99,51 +92,6 @@ access the model objects passed down into the template:
 <%= user.name %>
 ```
 
-<<<<<<< HEAD
-You can also use some given helpers for establishing authorization logic
-in ApplicationController. Since `ControllerResources` is included by
-default, you can use the given `current_resource` method to tell Pundit
-(for example) which policy to use in authorization:
-
-```ruby
-class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
-  before_action :authorize_user!
-
-  rescue_from Pundit::NotAuthorizedError, with: :forbidden
-
-  def forbidden
-    render 'forbidden', status: :forbidden
-  end
-
-  private
-
-  def authorize_user!
-    authorize current_user, current_resource, current_action
-  end
-
-  def current_action
-    :"#{action_name}?"
-  end
-end
-```
-
-This `current_resource` method is populated by the given configured
-Resource object, which will attempt to classify its `model_name` and
-provide a class constant that can be used here. In the
-`PostsController#show` action, for example, that call to `authorize` would be
-partially expanded like this:
-
-```ruby
-authorize current_user, Post, :show?
-```
-
-(where `current_user` is the authenticated User found by Devise)
-
-While ControllerResources doesn't provide authorization or
-authentication helpers, it does provide the necessary methods to aid
-your own authorization and authentication frameworks in their job.
-
 ## Contributing
 
 Contributions to `ControllerResources` may be made using GitHub pull
@@ -153,13 +101,34 @@ for any contribution to be considered.
 To run tests:
 
 ```bash
-$ rake test
+$ bin/rake test
 ```
 
 This will also use Rubocop to lint-check your code so it adheres to our
 style guide.
 
+## Releasing
+
+
+All acceptance testing and final RubyGems.org releasing is performed
+automatically by [Travis CI][ci]. When a new gem version needs to be
+released, one with push access to the repo can update the version by
+running the following Rake task, which will tag the latest version of
+the gem and push all commits to GitHub, where it will be picked up by
+Travis and auto-deployed to [RubyGems][rg]:
+
+```bash
+$ bin/rake release
+```
+
+ControllerResources adheres to the [Semantic Versioning][semver]
+standard for publishing new versions of the library. Bug fixes will be
+pushed in patch updates, while new features that maintain compatibility
+will be available in minor updates. Major updates are reserved for new
+features that break existing compatibility.
+
 [de]: https://github.com/hashrocket/decent_exposure
 [rp]: https://github.com/plataformatec/responders
 [sp]: https://github.com/rails/strong_parameters
-
+[ci]: https://travis-ci.org
+[rg]: https://rubygems.org

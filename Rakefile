@@ -8,9 +8,22 @@ task :db do
   sh 'cd spec/dummy && bundle exec rake db:create db:migrate'
 end
 
-RSpec::Core::RakeTask.new :spec
+# Run RSpec code examples
+RSpec::Core::RakeTask.new :test
 
+# Run RuboCop lint checks
 RuboCop::RakeTask.new :lint
 
-desc 'Run Rubocop lint checks and RSpec code examples'
-task test: %w(lint spec)
+# Clear out default Bundler release task
+Rake::Task['release'].clear
+
+desc "Release this gem to RubyGems.org via Travis-CI"
+task release: %w(
+  build release:guard_clean release:source_control_push
+) do
+  Bundler.ui.confirm 'Please wait for Travis-CI to build the gem'
+  Bundler.ui.confirm 'https://travis-ci.org/tubbo/controller_resources'
+end
+
+# CI task
+task default: %i(lint db test build)
