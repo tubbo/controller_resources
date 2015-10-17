@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
   resource :post do
-    search :title
-    modify :title, :body
+    permit :title, :body
   end
 
   # GET /posts
