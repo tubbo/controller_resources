@@ -1,21 +1,30 @@
 language: ruby
 sudo: false
-cache: bundler
+cache: bundle
 rvm:
   - 2.0.0
   - 2.1.6
   - 2.2.2
-cache: bundle
 addons:
   codeclimate:
     repo_token:
       secure: CxFMGcOhwkzowVZyys4fxSlsahNTNR6eBnRJmXqOhzjZwOoB7z0j3wfvIv8lDkKl03ayFUmToH147M4euh6RTbyCiFa9ti/bcVglWHaTDn6Qh5Ow6FWSJ76tIPAXpDaipn+ns8PQpsvrBISu6pB0MTgBbMwGQLpEUbDKtOCxexY=
 deploy:
-  provider: rubygems
-  api_key:
-    secure: Ss+mExNaQHwVyJ0u5cN/BrrVEPZPUdojUxbVj5xa4fjT8OCmaeXY6DM24L1dDpysNLlExKzNVzK6JZNl1KFE03U6Be+S8sr5yJ3hlhPIqShA21+riiC/yeEnNw9oWv+EDDw2CD5TImF3u4YmGJohVdpCGl2U3tlRP5Kchz1vYjw=
-  gem: controller_resources
-  on:
-    tags: true
-    repo: tubbo/controller_resources
-    rvm: 2.2.2
+  - provider: rubygems
+    skip_cleanup: true
+    api_key:
+      secure: Ss+mExNaQHwVyJ0u5cN/BrrVEPZPUdojUxbVj5xa4fjT8OCmaeXY6DM24L1dDpysNLlExKzNVzK6JZNl1KFE03U6Be+S8sr5yJ3hlhPIqShA21+riiC/yeEnNw9oWv+EDDw2CD5TImF3u4YmGJohVdpCGl2U3tlRP5Kchz1vYjw=
+    on:
+      repo: tubbo/controller_resources
+      tags: true
+      rvm: 2.2.2
+  - provider: releases
+    before_deploy: bundle exec rake ci:package
+    skip_cleanup: true
+    api_key:
+      secure: d3ezN68q4noQdeL7cGqHZiHP5Yhn27Vd0CENAPjf8HsatgvRSUne79Xi0RLABI/C5t/zAknhKUix8ecxweH+/fg2uG15wKjEeHf5cXZu5nWi/lZhBU2xnrNuhi/JKdaeC9q4K/1N5qIVSCyNIGZ1E4NGyfn3+6HSlF5KwoTc79Q=
+    file: "pkg/controller_resources.gem"
+    on:
+      repo: tubbo/controller_resources
+      tags: true
+      rvm: 2.2.2
