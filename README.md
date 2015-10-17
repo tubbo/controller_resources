@@ -93,6 +93,8 @@ The `model_name`, `collection_name` and `model` / `collection` methods
 are included as helpers along with the rest of the exposure methods in
 your view as well as the controller.
 
+For more, consult the [RDoc Documentation][rdoc]
+
 ## Contributing
 
 Contributions to `ControllerResources` may be made using GitHub pull
@@ -136,3 +138,4 @@ features that break existing compatibility.
 [rg]: https://rubygems.org
 [pjs]: http://phantomjs.org
 [sv]: http://semver.org
+[rdoc]: http://rubydoc.info/github/tubbo/controller_resources/master
