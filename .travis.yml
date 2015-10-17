@@ -8,7 +8,7 @@ rvm:
 addons:
   codeclimate:
     repo_token:
-      secure: CxFMGcOhwkzowVZyys4fxSlsahNTNR6eBnRJmXqOhzjZwOoB7z0j3wfvIv8lDkKl03ayFUmToH147M4euh6RTbyCiFa9ti/bcVglWHaTDn6Qh5Ow6FWSJ76tIPAXpDaipn+ns8PQpsvrBISu6pB0MTgBbMwGQLpEUbDKtOCxexY=
+      secure: XGGGnkqnHKX54WPKNy6QCVuGLmZbApKLCerCuDAMq+Vgu8pCULJsWOOKUX2o5cAhCze5UC1gMic+05MYmUTrD3n9J+SZhoZi0LKEzZbilsJu02AUZSRfXbp4jtGnApT3IUzfD2tPoL1my00s1PJq5D2eDyjCLGtDiuwk/G8Hdpc=
 deploy:
   - provider: rubygems
     skip_cleanup: true
