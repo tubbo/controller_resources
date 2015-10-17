@@ -7,7 +7,7 @@
 
 A Rails engine providing a common DSL for fetching model resources in
 the controller and view layers. It leverages
-[DecentExposure][de],[StrongParameters][sp] and assumes an
+[DecentExposure][de], [StrongParameters][sp] and assumes an
 [ActiveRecord][ar]-like DSL for querying model objects.
 ControllerResources does not assume any part of your stack, instead
 providing generic tools and extensions to ActionController which allow
@@ -148,3 +148,4 @@ we're testing, see [Travis CI][ci].
 [pjs]: http://phantomjs.org
 [sv]: http://semver.org
 [rdoc]: http://rubydoc.info/github/tubbo/controller_resources/master
+[ar]: http://guides.rubyonrails.org/active_record_basics.html
