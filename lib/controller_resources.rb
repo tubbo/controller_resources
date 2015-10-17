@@ -77,7 +77,7 @@ module ControllerResources
     #   expose :author
     #   resource :post, ancestor: :author
     #
-    def resource(name, options = {})
+    def resource(name, options = {}, &block)
       self.model_name = name
       self.collection_name = "#{name}".pluralize.to_sym
 
@@ -126,6 +126,7 @@ module ControllerResources
   # @return [StrongParameters::Parameters]
   def edit_params
     fail NotDefinedError unless resource?
+    return params.require(model_name).permit! unless params_to_permit.present?
     params.require(model_name).permit(*params_to_permit)
   end
 

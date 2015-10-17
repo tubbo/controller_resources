@@ -16,3 +16,5 @@ mkmf.log
 /vendor
 .env
 tags
+/spec/dummy/tmp
+/spec/examples.txt

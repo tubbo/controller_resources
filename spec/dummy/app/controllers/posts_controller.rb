@@ -5,12 +5,12 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    respond_with posts
+    render :index
   end
 
   # GET /posts/1
   def show
-    respond_with post
+    render :show
   end
 
   # GET /posts/new
@@ -26,18 +26,18 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     post.save
-    respond_with post
+    redirect_to post
   end
 
   # PATCH/PUT /posts/1
   def update
     post.update(edit_params)
-    respond_with post
+    redirect_to post
   end
 
   # DELETE /posts/1
   def destroy
     post.destroy
-    respond_with post
+    redirect_to posts_path
   end
 end

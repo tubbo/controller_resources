@@ -1,52 +1,31 @@
-class Collection
-  attr_reader :array
-  include Enumerable
+class TestController
+  Params = Struct.new :parameters
 
-  def initialize
-    @array = [ Post.new(id: 1) ]
-  end
-
-  delegate :each, to: :array
-
-  def find(id)
-    array.find do |post|
-      post.id == id
+  def self.expose(name, options = {})
+    define_method name do
+      if name == :post
+        Post.all.first
+      else
+        Post.all
+      end
     end
   end
 
-  def include?(given)
-    any? do |model|
-      model.id == given.id
-    end
+  def self.permit(*params)
   end
-end
 
-class Post
-  include ActiveModel::Model
-
-  attr_accessor :id
-
-  class << self
-    def all
-      Collection.new
-    end
-
-    delegate :find, to: :all
+  def self.decent_configuration(&block)
   end
-end
 
-class PostsController < ActionController::Base
-  include DecentExposure
-  include ControllerResources
-
-  resource :post do
-    permit :name
+  def self.helper_method(*args)
   end
 
   def request
-    req = ActionDispatch::TestRequest.new
-    req.path_parameters = { 'id' => 1, 'post' => { 'name' => 'hello' } }
-    req
+    Params.new parameters: {}
+  end
+
+  def params
+    {}
   end
 end
 

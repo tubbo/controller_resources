@@ -1,9 +1,15 @@
-# Configure Rails Environment
-ENV['RAILS_ENV'] = 'test'
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require 'rspec/rails'
+require 'capybara/rspec'
+require 'codeclimate-test-reporter'
+require 'database_cleaner'
+require 'pry'
 
-# Load 3rd-party gems
-require 'bundler/setup'
-Bundler.require :default, :development
+# Perform all DB operations within a transaction.
+DatabaseCleaner.strategy = :transaction
+
+# Start test coverage reporting
 CodeClimate::TestReporter.start
 
 # Load Rails dummy app
@@ -15,6 +21,9 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Configure RSpec with `--init`-based options.
 RSpec.configure do |config|
+  config.use_transactional_fixtures = true
+  config.infer_base_class_for_anonymous_controllers = false
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -87,4 +96,12 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  config.before do
+    DatabaseCleaner.start
+  end
+
+  config.after do
+    DatabaseCleaner.clean
+  end
 end
