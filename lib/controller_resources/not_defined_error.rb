@@ -4,7 +4,9 @@ module ControllerResources
   class NotDefinedError < RuntimeError
     def initialize(*args)
       super
-      @message = "Call to #edit_params failed: Resource not defined."
+      @message = %(
+        Call to #edit_params failed: Resource not defined.
+      )
     end
   end
 end

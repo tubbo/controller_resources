@@ -4,10 +4,12 @@ require 'controller_resources/version'
 require 'controller_resources/engine'
 require 'controller_resources/not_defined_error'
 
-# A DSL for ActionController that allows you to easily and quickly define
+# The DSL mixin for ActionController that allows you to quickly define
 # both singular and collection model resources that can be operated on
 # within the controller. Attempts to DRY up most of the boilerplate code
 # at the top of each controller used to set up its state.
+#
+# @author Tom Scott
 #
 # @example
 #
@@ -68,15 +70,19 @@ module ControllerResources
     # If a block is given, one can also call additional DSL methods
     # like +permit+.
     #
-    # @param [Symbol] name
-    # @param [Hash] options
-    # @param &block
+    # @param [Symbol] name - the name of the model exposure, which
+    # is pluralized to compute the name of the collection exposure and
+    # stored to +model_name+.
+    # @param [Hash] options - passed wholesale to both +expose+ methods,
+    # and useful for defining custom +DecentExposure+ options.
+    # @param &block - a block that is yielded after +expose+ methods are
+    # defined, and used primarily to set permittable params.
     # @example
     #
     #   expose :author
     #   resource :post, ancestor: :author
     #
-    def resource(name, options = {}, &block)
+    def resource(name, options = {})
       self.model_name = name
       self.collection_name = "#{name}".pluralize.to_sym
 
@@ -104,7 +110,8 @@ module ControllerResources
 
   # Reader method for the defined singular resource.
   #
-  # @return [Object] or +nil+ if no resource has been defined.
+  # @return [Object] the model object or +nil+ if no resource has been
+  # defined.
   def model
     return unless resource?
     public_send model_name
@@ -112,7 +119,8 @@ module ControllerResources
 
   # Reader method for the defined collection resource.
   #
-  # @return [Object] or +nil+ if no resource has been defined.
+  # @return [Object] the collection of models or +nil+ if no resource
+  # has been defined.
   def collection
     return unless resource?
     public_send collection_name
@@ -122,7 +130,9 @@ module ControllerResources
   # +StrongParameters+. Throws a +ControllerResources::NotDefinedError+
   # if no +resource+ block has been defined on this controller.
   #
-  # @return [StrongParameters::Parameters]
+  # @return [ActionController::Parameters] the +StrongParameters+ hash.
+  # @raise [ControllerResources::NotDefinedError] when no +resource+ has
+  # been defined on this controller.
   def edit_params
     fail NotDefinedError unless resource?
     return params.require(model_name).permit! unless params_to_permit.present?

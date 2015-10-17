@@ -17,7 +17,7 @@ RuboCop::RakeTask.new :lint
 # Clear out default Bundler release task
 Rake::Task['release'].clear
 
-desc "Release this gem to RubyGems.org via Travis-CI"
+desc "Release version to RubyGems via Travis-CI"
 task release: %w(
   build release:guard_clean release:source_control_push
 ) do

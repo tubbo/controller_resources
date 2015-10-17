@@ -3,5 +3,15 @@ AllCops:
     - spec/dummy/**/*
     - vendor/**/*
     - bin/**/*
+    - spec/support/**/*
+
 Metrics/AbcSize:
   Max: 32
+
+Style/Documentation:
+  Exclude:
+    - lib/controller_resources/version.rb
+    - spec/**/*.rb
+
+Style/StringLiterals:
+  Enabled: false

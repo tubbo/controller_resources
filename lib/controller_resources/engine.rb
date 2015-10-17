@@ -1,5 +1,6 @@
 module ControllerResources
-  # Extensions for the including Rails app.
+  # Extends +ActionController::Base+ in the host app to include the
+  # +ControllerResources+ mixin by default.
   class Engine < ::Rails::Engine
     isolate_namespace ControllerResources
 
