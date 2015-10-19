@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.feature 'posts' do
   let :post do
-    Post.all.first
+    posts :post
   end
 
   scenario 'listing all posts' do
@@ -23,8 +23,8 @@ RSpec.feature 'posts' do
     skip
     visit new_post_path
 
-    fill_in 'post[title]', with: 'new post'
-    fill_in 'post[body]', with: 'this is a new post'
+    fill_in 'Title', with: 'new post'
+    fill_in 'Body', with: 'this is a new post'
     click_button 'Save'
 
     expect(page).to have_content 'Listing Posts'
@@ -34,7 +34,7 @@ RSpec.feature 'posts' do
     skip
     visit edit_post_path(post)
 
-    fill_in 'post[title]', with: 'new title'
+    fill_in 'Title', with: 'new title'
     click_button 'Save'
 
     expect(page).to have_content 'new title'

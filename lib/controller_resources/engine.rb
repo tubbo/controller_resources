@@ -1,13 +1,9 @@
 module ControllerResources
-  # Extends +ActionController::Base+ in the host app to include the
-  # +ControllerResources+ mixin by default.
+  # Configures the +ControllerResources+ to be isolated and
+  # eager-loaded.
   class Engine < ::Rails::Engine
     isolate_namespace ControllerResources
 
-    ActiveSupport.on_load :action_controller do
-      ActionController::Base.class_eval do
-        include ControllerResources
-      end
-    end
+    config.eager_load_namespaces << ControllerResources
   end
 end
