@@ -10,21 +10,11 @@ addons:
     repo_token:
       secure: XGGGnkqnHKX54WPKNy6QCVuGLmZbApKLCerCuDAMq+Vgu8pCULJsWOOKUX2o5cAhCze5UC1gMic+05MYmUTrD3n9J+SZhoZi0LKEzZbilsJu02AUZSRfXbp4jtGnApT3IUzfD2tPoL1my00s1PJq5D2eDyjCLGtDiuwk/G8Hdpc=
 deploy:
-  - provider: rubygems
-    skip_cleanup: true
-    api_key:
-      secure: Ss+mExNaQHwVyJ0u5cN/BrrVEPZPUdojUxbVj5xa4fjT8OCmaeXY6DM24L1dDpysNLlExKzNVzK6JZNl1KFE03U6Be+S8sr5yJ3hlhPIqShA21+riiC/yeEnNw9oWv+EDDw2CD5TImF3u4YmGJohVdpCGl2U3tlRP5Kchz1vYjw=
-    on:
-      repo: tubbo/controller_resources
-      tags: true
-      rvm: 2.2.2
-  - provider: releases
-    before_deploy: bundle exec rake ci:package
-    skip_cleanup: true
-    api_key:
-      secure: d3ezN68q4noQdeL7cGqHZiHP5Yhn27Vd0CENAPjf8HsatgvRSUne79Xi0RLABI/C5t/zAknhKUix8ecxweH+/fg2uG15wKjEeHf5cXZu5nWi/lZhBU2xnrNuhi/JKdaeC9q4K/1N5qIVSCyNIGZ1E4NGyfn3+6HSlF5KwoTc79Q=
-    file: "pkg/controller_resources.gem"
-    on:
-      repo: tubbo/controller_resources
-      tags: true
-      rvm: 2.2.2
+  provider: rubygems
+  skip_cleanup: true
+  api_key:
+    secure: Ss+mExNaQHwVyJ0u5cN/BrrVEPZPUdojUxbVj5xa4fjT8OCmaeXY6DM24L1dDpysNLlExKzNVzK6JZNl1KFE03U6Be+S8sr5yJ3hlhPIqShA21+riiC/yeEnNw9oWv+EDDw2CD5TImF3u4YmGJohVdpCGl2U3tlRP5Kchz1vYjw=
+  on:
+    repo: tubbo/controller_resources
+    tags: true
+    rvm: 2.2.2
