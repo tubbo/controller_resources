@@ -33,19 +33,19 @@ module ControllerResources
       # Given name of the model as supplied to the +resource+ directive.
       #
       # @attr_accessor [Symbol]
-      cattr_accessor :model_name
+      class_attribute :model_name
 
       # Collection name computed by pluralizing the given model name.
       #
       # @attr_accessor [Symbol]
-      cattr_accessor :collection_name
+      class_attribute :collection_name
 
       # A collection of arguments supplied to +StrongParameters#permit+
       # that is used in the +edit_params+ method to easily define
       # attributes which need to be whitelisted for mass assignment.
       #
       # @attr_accessor [Array]
-      cattr_accessor :params_to_permit
+      class_attribute :params_to_permit
 
       # Configures +DecentExposure+ to use the +edit_params+ method
       # defined by this module as the default attributes for mass
