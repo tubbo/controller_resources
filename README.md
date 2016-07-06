@@ -6,35 +6,26 @@
 [![Inline docs](http://inch-ci.org/github/tubbo/controller_resources.svg?branch=master)](http://inch-ci.org/github/tubbo/controller_resources)
 
 A Rails engine providing a common DSL for fetching model resources in
-the controller and view layers. It leverages
-[DecentExposure][de], [StrongParameters][sp] and assumes an
-ActiveRecord-like DSL for querying model objects.
-ControllerResources does not assume any part of your stack, instead
-providing generic tools and extensions to ActionController which allow
-you to use the fetched resources however you want.
+the controller and view layers.
 
 ```ruby
-resource :post do
-  permit :title, :category, :body, :is_published
+class PostsController < ApplicationController
+  resource :post
+  respond_to :html
+
+  def index
+    respond_with @posts
+  end
 end
 ```
 
-...and not have to worry about where the `posts` and `post` methods come
-from. If you're used to working with DecentExposure, you'll know that
-we're just using the `expose` macro to set up these resources, and using
-the `resource` macro to populate what we expose and additionally what
-parameters to pass through.
+You can also specify an ancestor, which is used to look up the given
+resource.
 
-You can establish DecentExposure configuration with the `resource` block
-by calling methods which do not exist on the Resource. All of these
-methods are passed down to DecentExposure:
 
-```ruby
-expose :post, param: :post_id
-resource :comment, ancestor: :post do
-  permit :body, :user_id
-end
-```
+In this example, `@comment` is being looked up using
+`@post.comments.find` rather than the default `Comment.find`.
+
 
 ## Installation
 
@@ -50,38 +41,54 @@ And run
 $ bundle install
 ```
 
-## Usage
-
-Define your resource in the controller, and you can use methods instead
-of instance variables to access the model object. No more writing finder
-methods!
+Then, include the module in your base controller class:
 
 ```ruby
-class ItemsController < ApplicationController
-  resource :item do
-    permit :name, :user, :is_private
-  end
-
-  def index
-    respond_with items
-  end
-
-  def show
-    respond_with item
-  end
-
-  def create
-    item.save
-    respond_with item
-  end
+class ApplicationController < ActionController::Base
+  include ControllerResources
 end
 ```
 
-In your view, you can use methods instead of instance variables to
-access the model objects passed down into the template:
+## Usage
 
-```erb
-<%= user.name %>
+Using the `resource` macro, you can define the name of your resource
+which will be used to derive instance variable names and class names for
+your models. ControllerResources assumes that your instance variables
+are named conventionally, and assumes that you follow Rails best
+practices when assigning instance variables in the controller.
+
+```ruby
+class CommentsController < ApplicationController
+  before_action :find_post
+  resource :comment, ancestor: :post
+  respond_to :html
+
+  def show
+    respond_with @comment
+  end
+
+  def new
+    @comment = @post.comments.build
+  end
+
+  def create
+    authorize @comment
+    @comment = @post.comments.create permitted_params(Comment)
+    respond_with @comment
+  end
+
+  def update
+    authorize @comment
+    @comment.update permitted_params(Comment)
+    respond_with @comment
+  end
+
+  private
+
+  def find_post
+    @post = Post.find params[:post_id]
+  end
+end
 ```
 
 ### Meta-Programming Capabilities
@@ -94,6 +101,34 @@ are included as helpers along with the rest of the exposure methods in
 your view as well as the controller.
 
 For more, consult the [RDoc Documentation][rdoc]
+
+### Customization
+
+As said before, the `model` and `collection` methods are exposed for you
+in the controller, and are what is used as the values for the instance
+variables set in `:find_resource`. You can override these methods in
+your base controller class to perform authorization or decoration logic
+in a consistent manner, like so:
+
+```ruby
+class ApplicationController < ActionController::Base
+  include ControllerResources
+
+  private
+
+  def model
+    super.tap do |record|
+      authorize record
+    end.decorate
+  end
+
+  def collection
+    super.tap do |records|
+      policy_scope records
+    end.decorate
+  end
+end
+```
 
 ## Contributing
 
