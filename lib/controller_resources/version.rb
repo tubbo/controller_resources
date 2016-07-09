@@ -1,4 +1,4 @@
 module ControllerResources
   # Current version of this gem.
-  VERSION = '0.1.3.pre'
+  VERSION = '1.0.0'
 end

@@ -1,6 +1,5 @@
-require 'active_support/concern'
+require 'active_support/all'
 require 'controller_resources/version'
-require 'controller_resources/engine'
 
 # A mixin for +ActionController+ for easily and consistently finding
 # resource objects to be used in the controller and view layer.
@@ -8,19 +7,14 @@ module ControllerResources
   extend ActiveSupport::Concern
 
   included do
-    # @!attribute [rw]
-    #   @return [String] Name of the resource we're operating on.
     class_attribute :resource_name
-
-    # @!attribute [rw]
-    #   @return [String] Name of the instance var acting as the ancestor.
+    class_attribute :resource_finder_method
+    class_attribute :resource_search_method
+    class_attribute :resource_id_param
+    class_attribute :resource_class_name
     class_attribute :resource_ancestor_name
-
-    # @!attribute [rw]
-    #   @return [Array<Symbol>] Actions that need a collection resource.
-    class_attribute :collection_actions do
-      %w(index)
-    end
+    class_attribute :collection_actions
+    self.collection_actions ||= %i(index)
   end
 
   class_methods do
@@ -30,9 +24,13 @@ module ControllerResources
     #
     # @param [Symbol] name - Lowercased name of the resource.
     # @option [Symbol] :ancestor - Optional ancestor ivar name.
-    def resource(name, ancestor: nil)
+    def resource(name, ancestor: nil, finder: :find, searcher: :where, param: :id, class_name: nil)
       self.resource_name = name.to_s
       self.resource_ancestor_name = ancestor.to_s if ancestor.present?
+      self.resource_search_method = searcher
+      self.resource_finder_method = finder
+      self.resource_id_param = param
+      self.resource_class_name = class_name || resource_name.classify
 
       before_action :find_resource, except: [:new, :create]
     end
@@ -65,7 +63,7 @@ module ControllerResources
   # @protected
   # @return [Object]
   def collection
-    model_class.send search_method, search_params
+    model_class.send resource_search_method, search_params
   end
 
   # Find the model by its ID, or return a new model.
@@ -73,7 +71,7 @@ module ControllerResources
   # @protected
   # @return [Object]
   def model
-    model_class.find model_id
+    model_class.send resource_finder_method, resource_id
   end
 
   # Find the ancestor of this model if it's defined. Used in the
@@ -94,15 +92,7 @@ module ControllerResources
   #
   # @return [Boolean] +true+ if action needs a collection as its resource.
   def collection?
-    collection_actions.include? action_name
-  end
-
-  # Override to provide your own, default is +:where+.
-  #
-  # @private
-  # @return [Symbol] Method on the model class used to search.
-  def search_method
-    :where
+    collection_actions.include? action_name.to_sym
   end
 
   # Override this method to provide your own search params.
@@ -111,21 +101,27 @@ module ControllerResources
   # @return [ActionController::Parameters] Params given to the search
   # method.
   def search_params
-    params
+    params.except!(:controller, :action, :format).permit!
   end
 
   # @private
   # @return [Class] Class constant for the given resource derived from
   # +resource_name+.
   def model_class
-    ancestor.send(plural_resource_name) || resource_name.classify.constantize
+    ancestor_resource || resource_class_name.constantize
+  end
+
+  def ancestor_resource
+    return unless ancestor.present?
+    return unless ancestor.respond_to? plural_resource_name
+    ancestor.send plural_resource_name
   end
 
   # Override to provide your own finder param.
   #
   # @private
   # @return [String] Param used to find a model, by default +params[:id]+
-  def model_id
-    params[:id]
+  def resource_id
+    params[resource_id_param]
   end
 end

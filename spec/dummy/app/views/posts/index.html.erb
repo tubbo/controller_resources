@@ -12,8 +12,8 @@
   </thead>
 
   <tbody>
-    <% posts.each do |post| %>
-      <tr>
+    <% @posts.each do |post| %>
+      <tr id="post-<%= post.id %>">
         <td><%= post.title %></td>
         <td><%= post.body %></td>
         <td><%= link_to 'Show', post %></td>

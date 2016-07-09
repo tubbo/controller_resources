@@ -1,7 +1,5 @@
 class PostsController < ApplicationController
-  resource :post do
-    permit :title, :body
-  end
+  resource :post
 
   # GET /posts
   def index
@@ -15,7 +13,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    render :new
+    @post = Post.new
   end
 
   # GET /posts/1/edit
@@ -25,19 +23,28 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    post.save
-    redirect_to post
+    @post = Post.create edit_params
+    flash[:notice] = 'Post created.'
+    redirect_to @post
   end
 
   # PATCH/PUT /posts/1
   def update
-    post.update(edit_params)
-    redirect_to post
+    @post.update edit_params
+    flash[:notice] = 'Post updated.'
+    redirect_to @post
   end
 
   # DELETE /posts/1
   def destroy
-    post.destroy
+    @post.destroy
+    flash[:notice] = 'Post deleted.'
     redirect_to posts_path
+  end
+
+  private
+
+  def edit_params
+    params.require(:post).permit :title, :body
   end
 end

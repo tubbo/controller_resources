@@ -6,10 +6,9 @@ require 'controller_resources/version'
 require 'yard'
 require 'travis/release/task'
 
-desc 'Set up the test database for the dummy app'
-task :db do
-  sh 'cd spec/dummy && bundle exec rake db:setup'
-end
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
+load 'rails/tasks/engine.rake'
+load 'rails/tasks/statistics.rake'
 
 # Run RSpec code examples
 RSpec::Core::RakeTask.new :test

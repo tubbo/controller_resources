@@ -1,13 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe ControllerResources do
-  class TestController < ActionController::Base
-    include ControllerResources
+class TestController
+  include ControllerResources
 
-    resource :comment, ancestor: :post
+  def self.before_action(*args)
+    true
   end
 
-  subject do
+  resource :comment, ancestor: :post
+end
+
+
+RSpec.describe ControllerResources do
+  let :controller do
     TestController
   end
 

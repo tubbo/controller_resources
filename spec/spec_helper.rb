@@ -7,20 +7,14 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
-# require 'capybara/poltergeist'
-require 'database_cleaner'
 require 'pry'
-
-# Perform all DB operations within a transaction.
-DatabaseCleaner.strategy = :transaction
+require 'rails/test_help'
 
 # Clean backtraces
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-
-# Capybara.javascript_driver = :poltergeist
 
 # Configure RSpec with `--init`-based options.
 RSpec.configure do |config|
@@ -101,12 +95,4 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
-
-  config.before do
-    DatabaseCleaner.start
-  end
-
-  config.after do
-    DatabaseCleaner.clean
-  end
 end
