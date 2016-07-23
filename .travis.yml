@@ -2,9 +2,7 @@ language: ruby
 sudo: false
 cache: bundler
 rvm:
-  - 2.0.0
-  - 2.1.6
-  - 2.2.2
+  - 2.3.1
 addons:
   codeclimate:
     repo_token:
@@ -17,4 +15,3 @@ deploy:
   on:
     repo: tubbo/controller_resources
     tags: true
-    rvm: 2.2.2
