@@ -28,11 +28,8 @@ RSpec.describe ControllerResources do
     expect(controller.resource_ancestor_name).to eq 'post'
   end
 
-  it 'has default collection actions' do
+  it 'has default collection actions but can add over time' do
     expect(controller.collection_actions).to eq([:index])
-  end
-
-  it 'can add collection actions' do
     controller.collection_actions << :show
     expect(controller.collection_actions).to eq([:index, :show])
   end

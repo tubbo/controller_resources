@@ -8,7 +8,7 @@ require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'pry'
-require 'rails/test_help'
+# require 'rails/test_help'
 
 # Clean backtraces
 Rails.backtrace_cleaner.remove_silencers!
