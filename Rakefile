@@ -26,7 +26,7 @@ YARD::Rake::YardocTask.new :doc
 Travis::Release::Task.new
 
 # CI task
-task default: %i(app:db:setup test build)
+task default: %i(test build)
 
 namespace :ci do
   desc "Rename gem package so it can be released with GitHub."
