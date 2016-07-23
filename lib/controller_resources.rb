@@ -101,7 +101,7 @@ module ControllerResources
   # @return [ActionController::Parameters] Params given to the search
   # method.
   def search_params
-    params.except!(:controller, :action, :format).permit!
+    params.permit!.except(:controller, :action, :format)
   end
 
   # @private
