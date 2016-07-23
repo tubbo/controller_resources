@@ -39,6 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yard', '~> 0'
   spec.add_development_dependency 'travis-release', '~> 0'
 
-  spec.add_dependency 'rails', '~> 4'
+  spec.add_dependency 'rails'
   spec.add_dependency 'decent_exposure', '~> 2'
 end
