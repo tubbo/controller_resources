@@ -1,9 +1,14 @@
 require 'active_support/all'
 require 'controller_resources/version'
+require 'controller_resources/engine'
 
 # A mixin for +ActionController+ for easily and consistently finding
 # resource objects to be used in the controller and view layer.
 module ControllerResources
+  DEFAULT_FINDER_METHOD = :find
+  DEFAULT_SEARCH_METHOD = :search
+  DEFAULT_FINDER_PARAM = :id
+
   extend ActiveSupport::Concern
 
   included do
@@ -14,6 +19,7 @@ module ControllerResources
     class_attribute :resource_class_name
     class_attribute :resource_ancestor_name
     class_attribute :collection_actions
+
     self.collection_actions ||= %i(index)
   end
 
@@ -24,13 +30,14 @@ module ControllerResources
     #
     # @param [Symbol] name - Lowercased name of the resource.
     # @option [Symbol] :ancestor - Optional ancestor ivar name.
-    def resource(name, ancestor: nil, finder: :find, searcher: :where, param: :id, class_name: nil)
+    def resource(name, ancestor: nil, finder: nil, searcher: nil, param: nil, class_name: nil)
+      config = Rails.configuration.controller_resources
       self.resource_name = name.to_s
-      self.resource_ancestor_name = ancestor.to_s if ancestor.present?
-      self.resource_search_method = searcher
-      self.resource_finder_method = finder
-      self.resource_id_param = param
       self.resource_class_name = class_name || resource_name.classify
+      self.resource_ancestor_name = ancestor.to_s if ancestor.present?
+      self.resource_search_method = searcher || config.search_method || DEFAULT_SEARCH_METHOD
+      self.resource_finder_method = finder || config.finder_method || DEFAULT_FINDER_METHOD
+      self.resource_id_param = param || config.id_param || DEFAULT_ID_PARAM
 
       before_action :find_resource, except: [:new, :create]
     end
