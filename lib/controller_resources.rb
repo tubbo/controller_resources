@@ -32,6 +32,7 @@ module ControllerResources
       self.resource_id_param = param
       self.resource_class_name = class_name || resource_name.classify
 
+      before_action :"find_#{ancestor}" if ancestor.present?
       before_action :find_resource, except: [:new, :create]
     end
   end
