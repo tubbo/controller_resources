@@ -8,6 +8,32 @@
 A Rails engine providing a common DSL for fetching model resources in
 the controller and view layers.
 
+Turn this:
+
+```ruby
+class PostsController < ApplicationController
+  before_action :find_post, except: [:index]
+  respond_to :html
+
+  def index
+    @posts = Post.where(search_params)
+    respond_with @posts
+  end
+  
+  def show
+    respond_with @post
+  end
+  
+  private
+  
+  def find_post
+    @post = Post.find params[:id]
+  end
+end
+```
+
+Into this:
+
 ```ruby
 class PostsController < ApplicationController
   resource :post
@@ -22,10 +48,25 @@ end
 You can also specify an ancestor, which is used to look up the given
 resource.
 
-
 In this example, `@comment` is being looked up using
-`@post.comments.find` rather than the default `Comment.find`.
+`@post.comments.find` rather than the default `Comment.find`:
 
+```ruby
+class CommentsController < ApplicationController
+  before_action :find_post
+  resource :comment, ancestor: :post
+  
+  def show
+    respond_with @comment
+  end
+  
+  private
+  
+  def find_post
+    @post = Post.find params[:post_id]
+  end
+end
+```
 
 ## Installation
 
@@ -113,19 +154,19 @@ in a consistent manner, like so:
 ```ruby
 class ApplicationController < ActionController::Base
   include ControllerResources
+  include Makeover::Presentable
+  include Pundit
+  
+  protect_from_forgery with: :exception
 
   private
 
   def model
-    super.tap do |record|
-      authorize record
-    end.decorate
+    present authorize(super)
   end
 
   def collection
-    super.tap do |records|
-      policy_scope records
-    end.decorate
+    present policy_scope(records)
   end
 end
 ```
