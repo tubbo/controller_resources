@@ -1,6 +1,6 @@
 # ControllerResources
 
-[![Build Status](https://travis-ci.org/tubbo/controller_resources.svg)](https://travis-ci.org/tubbo/controller_resources)
+[![Build Status](https://travis-ci.org/tubbo/controller_resources.svg?branch=master)](https://travis-ci.org/tubbo/controller_resources)
 [![Code Climate](https://codeclimate.com/github/tubbo/controller_resources/badges/gpa.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 [![Test Coverage](https://codeclimate.com/github/tubbo/controller_resources/badges/coverage.svg)](https://codeclimate.com/github/tubbo/controller_resources)
 [![Inline docs](http://inch-ci.org/github/tubbo/controller_resources.svg?branch=master)](http://inch-ci.org/github/tubbo/controller_resources)
